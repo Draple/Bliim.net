@@ -72,6 +72,8 @@
       'footer.tagline': 'Desarrollo · Servicios al cliente · Servicios administrativos',
       'footer.company': 'Empresa',
       'footer.info': 'Información',
+      'footer.terms': 'Términos y condiciones',
+      'footer.privacy': 'Política de privacidad',
       'footer.copyright': 'Todos los derechos reservados.'
     },
     en: {
@@ -143,6 +145,8 @@
       'footer.tagline': 'Development · Client services · Administrative services',
       'footer.company': 'Company',
       'footer.info': 'Information',
+      'footer.terms': 'Terms and conditions',
+      'footer.privacy': 'Privacy policy',
       'footer.copyright': 'All rights reserved.'
     }
   };
