@@ -762,7 +762,8 @@ ul {
 }
 
 /* Ocultar el bloque que no corresponde al idioma seleccionado */
-.legal-content[hidden] {
+.legal-content[hidden],
+.legal-content.is-hidden {
   display: none !important;
 }
 

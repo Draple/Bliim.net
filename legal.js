@@ -25,9 +25,11 @@
       if (contentLang === lang) {
         el.removeAttribute('hidden');
         el.style.display = '';
+        el.classList.remove('is-hidden');
       } else {
         el.setAttribute('hidden', '');
         el.style.display = 'none';
+        el.classList.add('is-hidden');
       }
     });
     document.documentElement.setAttribute('lang', lang);
@@ -38,45 +40,55 @@
     if (current) current.textContent = lang.toUpperCase();
   }
 
-  // Language selector
-  var langBtn = document.querySelector('.lang-selector__btn');
-  var langDropdown = document.querySelector('.lang-selector__dropdown');
-  var langOptions = document.querySelectorAll('.lang-selector__option');
+  function init() {
+    var langBtn = document.querySelector('.lang-selector__btn');
+    var langDropdown = document.querySelector('.lang-selector__dropdown');
+    var langOptions = document.querySelectorAll('.lang-selector__option');
 
-  if (langBtn && langDropdown) {
-    langBtn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var expanded = langBtn.getAttribute('aria-expanded') === 'true';
-      langBtn.setAttribute('aria-expanded', !expanded);
-      langDropdown.setAttribute('aria-hidden', expanded);
-      langDropdown.classList.toggle('is-open');
-    });
-
-    langOptions.forEach(function (option) {
-      option.addEventListener('click', function () {
-        var lang = this.getAttribute('data-lang');
-        setLang(lang);
-        showLegalContent(lang);
-        updateLangSelector(lang);
-        langBtn.setAttribute('aria-expanded', 'false');
-        langDropdown.setAttribute('aria-hidden', 'true');
-        langDropdown.classList.remove('is-open');
+    if (langBtn && langDropdown) {
+      langBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var expanded = langBtn.getAttribute('aria-expanded') === 'true';
+        langBtn.setAttribute('aria-expanded', !expanded);
+        langDropdown.setAttribute('aria-hidden', expanded);
+        langDropdown.classList.toggle('is-open');
       });
-    });
 
-    document.addEventListener('click', function (e) {
-      if (!langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
-        langBtn.setAttribute('aria-expanded', 'false');
-        langDropdown.setAttribute('aria-hidden', 'true');
-        langDropdown.classList.remove('is-open');
-      }
-    });
+      langOptions.forEach(function (option) {
+        option.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          var lang = this.getAttribute('data-lang');
+          if (!lang) return;
+          setLang(lang);
+          showLegalContent(lang);
+          updateLangSelector(lang);
+          langBtn.setAttribute('aria-expanded', 'false');
+          langDropdown.setAttribute('aria-hidden', 'true');
+          langDropdown.classList.remove('is-open');
+        });
+      });
+
+      document.addEventListener('click', function (e) {
+        if (!langBtn.contains(e.target) && !langDropdown.contains(e.target)) {
+          langBtn.setAttribute('aria-expanded', 'false');
+          langDropdown.setAttribute('aria-hidden', 'true');
+          langDropdown.classList.remove('is-open');
+        }
+      });
+    }
+
+    var lang = getLang();
+    showLegalContent(lang);
+    updateLangSelector(lang);
   }
 
-  // Init: show content for saved or default lang
-  var lang = getLang();
-  showLegalContent(lang);
-  updateLangSelector(lang);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 
   // Year
   var yearEl = document.getElementById('year');
@@ -92,7 +104,7 @@
       mobileNav.classList.toggle('is-open');
       mobileNav.setAttribute('aria-hidden', expanded);
     });
-    mobileNav.querySelectorAll('.nav__link, a').forEach(function (link) {
+    mobileNav.querySelectorAll('a').forEach(function (link) {
       link.addEventListener('click', function () {
         menuBtn.setAttribute('aria-expanded', 'false');
         mobileNav.classList.remove('is-open');
